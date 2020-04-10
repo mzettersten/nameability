@@ -1,0 +1,3 @@
+trials,stimulus,number_responses,total_words,total_lemmas,avg_words_per_response,percent_unique_words,percent_unique_lemmas,simpson_diversity,modal_agreement,modal_names,modal_response_agreement,modal_response
+all_trials,cat,2,6,6,3.0,0.6666666666666666,0.6666666666666666,0.13333333333333333,1.0,"milk,paw",0.5,"milk.paw.meows,milk.paw.kitty"
+all_trials,dog,2,6,6,3.0,0.16666666666666666,0.16666666666666666,1.0,3.0,bark,1.0,bark.bark.bark

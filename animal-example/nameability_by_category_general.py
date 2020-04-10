@@ -9,6 +9,16 @@ from nltk.corpus import wordnet
 #nltk.download('wordnet') #uncomment if wordnet is not already downloaded
 lemmatiser = WordNetLemmatizer()
 
+#file name
+file_name="toy_animal_data_2b.csv"
+#file_name="processed_data/mediator_data_filtered_correct.csv"
+new_file_name="toy_animal_data_2b_nameability.csv"
+#new_file_name="processed_data/mediator_nameability_filtered_correct.csv"
+stim_column="stimulus"
+response_column="mediator_response"
+trials="all_trials"
+#trials="correct_only"
+
 #function for creating lemmas/ types
 def make_singular(response): #lemmatize nouns. If the repsonse has multiple words, lemmatize just the last word
     response = response.split(' ')
@@ -44,26 +54,22 @@ def lemmatize_pos(response): #lemmatize responses
             lemma_list.append(lemmatiser.lemmatize(response[i], pos=wordnet_pos))
     return lemma_list
 
-def unify_grey(response):
-    if response=="gray":
-        new_response="grey"
-    else:
-        new_response=response
-    return new_response
 
 #read in data set
-d = pd.read_csv("color_responses.csv")
-#d = pd.read_csv("test.csv") #test data set
+d = pd.read_csv(file_name)
 #check out the data (first 10 rows)
-d.loc[range(10),]
+d.loc[range(12),]
 
 #array of unique category names
-categoryNames=np.unique(d["RGB"])
+categoryNames=np.unique(d[stim_column])
 
 #will contain the number of total responses for a category
 number_responses=[]
 #will contain the average number of words in a category's response
 avg_words_per_response=[]
+#tracks total number of words/ lemmas
+total_words =[]
+total_lemmas=[]
 #tracks percent unique words (number of unique words / number of total words - higher means a higher proportion of unqiue responses, i.e. less agreement)
 percent_unique_words=[]
 percent_unique_lemmas=[]
@@ -90,7 +96,7 @@ for category in categoryNames:
     responseList=[]
     
     #loop through each response for that category
-    for response in d.loc[d["RGB"]==category,"colorname"]:
+    for response in d.loc[d[stim_column]==category,response_column]:
         #break response into a list of unique words while stripping punctuation
         #look up list comprehension in python to try to break down what's going on here
         #I first remove any punctuation/ unusual characters from the response (except apostrophes)
@@ -98,7 +104,6 @@ for category in categoryNames:
         response_punctuation_cleaned=" ".join([y.translate(string.maketrans("",""), chars_to_remove) for y in str(response).lower().split(" ") if (y != "") & (y!=".")])
         #now tokenize
         curWordList = nltk.word_tokenize(response_punctuation_cleaned) #tokenize
-        curWordList= [unify_grey(word) for word in curWordList] #unify grey spelling
         curLemmaList=[lemmatize_pos(x) for x in curWordList]
         #flatten list
         curLemmaList=[y for x in curLemmaList for y in x]
@@ -129,6 +134,12 @@ for category in categoryNames:
     
     #unique lemma list for the category
     uniqueLemmaList = np.unique(completeLemmaList)
+    
+    #total words
+    total_words.append(len(completeWordList))
+    
+    #total lemmas
+    total_lemmas.append(len(completeLemmaList))
     
     #proportion of unique words to total words
     percent_unique_words.append(float(len(uniqueWordList))/len(completeWordList))
@@ -165,10 +176,11 @@ for category in categoryNames:
  
        
 #put everything in a data frame
-df = pd.DataFrame({'RGB': categoryNames, 'number_responses': number_responses, 'avg_words_per_response': avg_words_per_response, 'percent_unique_words': percent_unique_words,'percent_unique_lemmas': percent_unique_lemmas, 'simpson_diversity': simpson_diversity, 'modal_agreement': modal_agreement, 'modal_names': modal_names, 'modal_response_agreement': modal_response_agreement, 'modal_response': modal_response})
-colNames=['RGB','number_responses', 'avg_words_per_response', 'percent_unique_words','percent_unique_lemmas', 'simpson_diversity','modal_agreement','modal_names','modal_response_agreement','modal_response']
+df = pd.DataFrame({'trials': trials,'stimulus': categoryNames, 'number_responses': number_responses, 'total_words': total_words, 'total_lemmas': total_lemmas, 'avg_words_per_response': avg_words_per_response, 'percent_unique_words': percent_unique_words,'percent_unique_lemmas': percent_unique_lemmas, 'simpson_diversity': simpson_diversity, 'modal_agreement': modal_agreement, 'modal_names': modal_names, 'modal_response_agreement': modal_response_agreement, 'modal_response': modal_response})
+colNames=['trials','stimulus','number_responses', 'total_words', 'total_lemmas', 'avg_words_per_response', 'percent_unique_words','percent_unique_lemmas', 'simpson_diversity','modal_agreement','modal_names','modal_response_agreement','modal_response']
 #reorder dataframe columns
 df=df[colNames]
+
 #write to csv
-df.to_csv('color_nameability.csv',index=False)
+df.to_csv(new_file_name,index=False)
 #df.to_csv('test_nameability.csv',index=False)
