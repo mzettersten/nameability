@@ -10,9 +10,9 @@ from nltk.corpus import wordnet
 lemmatiser = WordNetLemmatizer()
 
 #file name
-file_name="toy_animal_data_2b.csv"
+file_name="toy_animal_data_3.csv"
 #file_name="processed_data/mediator_data_filtered_correct.csv"
-new_file_name="toy_animal_data_2b_nameability.csv"
+new_file_name="toy_animal_data_3_nameability.csv"
 #new_file_name="processed_data/mediator_nameability_filtered_correct.csv"
 stim_column="stimulus"
 response_column="mediator_response"
@@ -70,7 +70,8 @@ avg_words_per_response=[]
 #tracks total number of words/ lemmas
 total_words =[]
 total_lemmas=[]
-#tracks percent unique words (number of unique words / number of total words - higher means a higher proportion of unqiue responses, i.e. less agreement)
+#tracks percent unique responses and unique words (number of unique words / number of total words - higher means a higher proportion of unqiue responses, i.e. less agreement)
+percent_unique_responses=[]
 percent_unique_words=[]
 percent_unique_lemmas=[]
 #tracks Simpson diversity over (cleaned) TOKENS (not necessarily types)
@@ -129,6 +130,9 @@ for category in categoryNames:
     #tracks average words per response
     avg_words_per_response.append(np.mean(responseLengthList))
     
+    #unique responses for the category
+    uniqueResponseList = np.unique(responseList)
+    
     #unique word list for the category
     uniqueWordList = np.unique(completeWordList)
     
@@ -140,6 +144,9 @@ for category in categoryNames:
     
     #total lemmas
     total_lemmas.append(len(completeLemmaList))
+    
+    #proportion of unique responses to total responses
+    percent_unique_responses.append(float(len(uniqueResponseList))/len(responseList))
     
     #proportion of unique words to total words
     percent_unique_words.append(float(len(uniqueWordList))/len(completeWordList))
@@ -176,8 +183,8 @@ for category in categoryNames:
  
        
 #put everything in a data frame
-df = pd.DataFrame({'trials': trials,'stimulus': categoryNames, 'number_responses': number_responses, 'total_words': total_words, 'total_lemmas': total_lemmas, 'avg_words_per_response': avg_words_per_response, 'percent_unique_words': percent_unique_words,'percent_unique_lemmas': percent_unique_lemmas, 'simpson_diversity': simpson_diversity, 'modal_agreement': modal_agreement, 'modal_names': modal_names, 'modal_response_agreement': modal_response_agreement, 'modal_response': modal_response})
-colNames=['trials','stimulus','number_responses', 'total_words', 'total_lemmas', 'avg_words_per_response', 'percent_unique_words','percent_unique_lemmas', 'simpson_diversity','modal_agreement','modal_names','modal_response_agreement','modal_response']
+df = pd.DataFrame({'trials': trials,'stimulus': categoryNames, 'number_responses': number_responses, 'total_words': total_words, 'total_lemmas': total_lemmas, 'avg_words_per_response': avg_words_per_response, 'percent_unique_responses': percent_unique_responses,'percent_unique_words': percent_unique_words,'percent_unique_lemmas': percent_unique_lemmas, 'simpson_diversity': simpson_diversity, 'modal_agreement': modal_agreement, 'modal_names': modal_names, 'modal_response_agreement': modal_response_agreement, 'modal_response': modal_response})
+colNames=['trials','stimulus','number_responses', 'total_words', 'total_lemmas', 'avg_words_per_response','percent_unique_responses', 'percent_unique_words','percent_unique_lemmas', 'simpson_diversity','modal_agreement','modal_names','modal_response_agreement','modal_response']
 #reorder dataframe columns
 df=df[colNames]
 

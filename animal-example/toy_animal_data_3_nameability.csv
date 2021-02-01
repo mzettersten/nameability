@@ -1,4 +1,4 @@
-trials,stimulus,number_responses,total_words,total_lemmas,avg_words_per_response,percent_unique_words,percent_unique_lemmas,simpson_diversity,modal_agreement,modal_names,modal_response_agreement,modal_response
-all_trials,dog,2,6,6,3.0,0.6666666666666666,0.6666666666666666,0.13333333333333333,1.0,"brown,bark",0.5,"pet.brown.bark,friendly.bark.brown"
-all_trials,dog2,2,6,6,3.0,0.6666666666666666,0.6666666666666666,0.13333333333333333,1.0,"brown,bark",0.5,"pet.brown.bark,friendly.brown.bark"
-all_trials,dog3,4,12,12,3.0,0.25,0.25,0.2727272727272727,1.0,"pet,brown,bark",1.0,pet.brown.bark
+trials,stimulus,number_responses,total_words,total_lemmas,avg_words_per_response,percent_unique_responses,percent_unique_words,percent_unique_lemmas,simpson_diversity,modal_agreement,modal_names,modal_response_agreement,modal_response
+all_trials,dog,2,6,6,3.0,1.0,0.6666666666666666,0.6666666666666666,0.13333333333333333,1.0,"brown,bark",0.5,"pet.brown.bark,friendly.bark.brown"
+all_trials,dog2,2,6,6,3.0,1.0,0.6666666666666666,0.6666666666666666,0.13333333333333333,1.0,"brown,bark",0.5,"pet.brown.bark,friendly.brown.bark"
+all_trials,dog3,4,12,12,3.0,0.25,0.25,0.25,0.2727272727272727,1.0,"pet,brown,bark",1.0,pet.brown.bark

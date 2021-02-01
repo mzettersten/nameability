@@ -58,7 +58,8 @@ categoryNames=np.unique(d["image"])
 number_responses=[]
 #will contain the average number of words in a category's response
 avg_words_per_response=[]
-#tracks percent unique words (number of unique words / number of total words - higher means a higher proportion of unqiue responses, i.e. less agreement)
+#tracks percent unique responses and unique words (number of unique words / number of total words - higher means a higher proportion of unqiue responses, i.e. less agreement)
+percent_unique_responses=[]
 percent_unique_words=[]
 percent_unique_lemmas=[]
 #tracks Simpson diversity over (cleaned) TOKENS (not necessarily types)
@@ -117,11 +118,17 @@ for category in categoryNames:
     #tracks average words per response
     avg_words_per_response.append(np.mean(responseLengthList))
     
+    #unique responses for the category
+    uniqueResponseList = np.unique(responseList)
+    
     #unique word list for the category
     uniqueWordList = np.unique(completeWordList)
     
     #unique lemma list for the category
     uniqueLemmaList = np.unique(completeLemmaList)
+    
+    #proportion of unique responses to total responses
+    percent_unique_responses.append(float(len(uniqueResponseList))/len(responseList))
     
     #proportion of unique words to total words
     percent_unique_words.append(float(len(uniqueWordList))/len(completeWordList))
@@ -158,8 +165,8 @@ for category in categoryNames:
  
        
 #put everything in a data frame
-df = pd.DataFrame({'image': categoryNames, 'number_responses': number_responses, 'avg_words_per_response': avg_words_per_response, 'percent_unique_words': percent_unique_words,'percent_unique_lemmas': percent_unique_lemmas, 'simpson_diversity': simpson_diversity, 'modal_agreement': modal_agreement, 'modal_names': modal_names, 'modal_response_agreement': modal_response_agreement, 'modal_response': modal_response})
-colNames=['image','number_responses', 'avg_words_per_response', 'percent_unique_words','percent_unique_lemmas', 'simpson_diversity','modal_agreement','modal_names','modal_response_agreement','modal_response']
+df = pd.DataFrame({'image': categoryNames, 'number_responses': number_responses, 'avg_words_per_response': avg_words_per_response, 'percent_unique_responses': percent_unique_responses, 'percent_unique_words': percent_unique_words,'percent_unique_lemmas': percent_unique_lemmas, 'simpson_diversity': simpson_diversity, 'modal_agreement': modal_agreement, 'modal_names': modal_names, 'modal_response_agreement': modal_response_agreement, 'modal_response': modal_response})
+colNames=['image','number_responses', 'avg_words_per_response', 'percent_unique_responses', 'percent_unique_words','percent_unique_lemmas', 'simpson_diversity','modal_agreement','modal_names','modal_response_agreement','modal_response']
 #reorder dataframe columns
 df=df[colNames]
 #rename one element
